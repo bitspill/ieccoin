@@ -1,0 +1,9 @@
+Building IvugeoEvolutionCoin
+
+See doc/readme-qt.rst for instructions on building IvugeoEvolutionCoin-Qt,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of IvugeoEvolutionCoin.
+
+See doc/build-*.txt for instructions on building ivugeoevolutioncoind,
+the intended-for-services, no-graphical-interface, reference
+implementation of IvugeoEvolutionCoin.
