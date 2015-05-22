@@ -24,6 +24,7 @@ class CInv;
 class CNode;
 
 struct CBlockIndexWorkComparator;
+/* Maturity threshold for PoW base transactions, in blocks (confirmations) */
 
 /** The maximum allowed size for a serialized block, in bytes (network rule) */
 static const unsigned int MAX_BLOCK_SIZE = 1000000;                      // 1000KB block hard limit
@@ -54,8 +55,16 @@ static const int64 DUST_HARD_LIMIT = 1000;   // 0.00001 IEC mininput
 /** No amount larger than this (in satoshi) is valid */
 static const int64 MAX_MONEY = 100000000 * COIN;
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
+
 /** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
 static const int COINBASE_MATURITY = 10;
+extern int nBaseMaturity;
+static const int BASE_MATURITY = 20;
+static const int BASE_MATURITY_TESTNET = 20;
+/* Offset for the above to allow safe network propagation, in blocks (confirmations) */
+static const int BASE_MATURITY_OFFSET = 1;
+/* Maturity threshold for regular transactions, in blocks (confirmations) */
+static const int TX_MATURITY = 6;
 /** Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp. */
 static const unsigned int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20 1985 UTC
 /** Maximum number of script-checking threads allowed */
@@ -100,6 +109,8 @@ extern bool fBenchmark;
 extern int nScriptCheckThreads;
 extern bool fTxIndex;
 extern unsigned int nCoinCacheSize;
+extern std::map<uint256, CBlock*> mapOrphanBlocks;
+
 
 // Settings
 extern int64 nTransactionFee;
