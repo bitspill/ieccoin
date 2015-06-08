@@ -1,7 +1,3 @@
-// Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
 #ifndef OVERVIEWPAGE_H
 #define OVERVIEWPAGE_H
 
@@ -29,7 +25,7 @@ public:
     ~OverviewPage();
 
     void setClientModel(ClientModel *clientModel);
-    void setWalletModel(WalletModel *walletModel);
+    void setModel(WalletModel *walletModel);
     void showOutOfSyncWarning(bool fShow);
 
 public slots:
@@ -52,7 +48,7 @@ private:
 private slots:
     void updateDisplayUnit();
     void handleTransactionClicked(const QModelIndex &index);
-    void updateAlerts(const QString &warnings);
+ //   void updateAlerts(const QString &warnings);
 };
 
 #endif // OVERVIEWPAGE_H

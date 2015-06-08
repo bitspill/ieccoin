@@ -1,7 +1,3 @@
-// Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
 #include "overviewpage.h"
 #include "ui_overviewpage.h"
 
@@ -63,6 +59,10 @@ public:
         {
             foreground = COLOR_NEGATIVE;
         }
+        else if(amount > 0)
+        {
+            foreground = COLOR_POSITIVE;
+        }	
         else if(!confirmed)
         {
             foreground = COLOR_UNCONFIRMED;
@@ -151,7 +151,7 @@ void OverviewPage::setBalance(qint64 balance, qint64 unconfirmedBalance, qint64 
     ui->labelImmature->setVisible(showImmature);
     ui->labelImmatureText->setVisible(showImmature);
 }
-
+/*
 void OverviewPage::setClientModel(ClientModel *model)
 {
     this->clientModel = model;
@@ -162,8 +162,8 @@ void OverviewPage::setClientModel(ClientModel *model)
         updateAlerts(model->getStatusBarWarnings());
     }
 }
-
-void OverviewPage::setWalletModel(WalletModel *model)
+*/
+void OverviewPage::setModel(WalletModel *model)
 {
     this->walletModel = model;
     if(model && model->getOptionsModel())
@@ -203,13 +203,13 @@ void OverviewPage::updateDisplayUnit()
         ui->listTransactions->update();
     }
 }
-
+/*
 void OverviewPage::updateAlerts(const QString &warnings)
 {
     this->ui->labelAlerts->setVisible(!warnings.isEmpty());
     this->ui->labelAlerts->setText(warnings);
 }
-
+*/
 void OverviewPage::showOutOfSyncWarning(bool fShow)
 {
     ui->labelWalletStatus->setVisible(fShow);

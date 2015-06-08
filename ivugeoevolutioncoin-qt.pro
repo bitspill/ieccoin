@@ -2,14 +2,20 @@ TEMPLATE = app
 TARGET = ivugeoevolutioncoin-qt
 macx:TARGET = "IvugeoEvolutionCoin-Qt"
 VERSION = 1.2.0.0
-INCLUDEPATH += src src/json src/qt
-QT += core gui network 
+INCLUDEPATH += src src/json src/qt src/qt/plugins/mrichtexteditor
+QT += core gui network printsupport script
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE USE_IPV6 BOOST_SPIRIT_THREADSAFE BOOST_THREAD_PROVIDES_GENERIC_SHARED_MUTEX_ON_WIN __NO_SYSTEM_INCLUDES
+DEFINES += ENABLE_TXINDEX_ENABLE_GUI
+DEFINES += ENABLE_TRADE_REQUIRE_QT5
 DEFINES += STATIC
 DEFINES += QT_STATIC_BUILD
 CONFIG += no_include_pwd
 CONFIG += thread
 CONFIG += static
+#ifdef ENABLE_TRADE_REQUIRE_QT5
+CONFIG += openssl-linked
+CONFIG += openssl
+#endif
 QMAKE_CXXFLAGS = -fpermissive
 greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
@@ -209,9 +215,6 @@ HEADERS += src/qt/bitcoingui.h \
     src/qt/transactionfilterproxy.h \
     src/qt/transactionview.h \
     src/qt/walletmodel.h \
-    src/qt/walletview.h \
-    src/qt/walletstack.h \
-    src/qt/walletframe.h \
     src/bitcoinrpc.h \
     src/qt/overviewpage.h \
     src/qt/csvmodelwriter.h \
@@ -237,7 +240,16 @@ HEADERS += src/qt/bitcoingui.h \
     src/limitedmap.h \
 	src/checkpointsync.h \
     src/qt/macnotificationhandler.h \
-    src/qt/splashscreen.h
+    src/qt/splashscreen.h \
+#ifdef ENABLE_TRADE_REQUIRE_QT5
+	src/qt/tradingdialog.h \
+#endif
+	src/qt/plugins/mrichtexteditor/mrichtextedit.h \
+	src/qt/header.h  \
+	src/qt/ActionButton.h \
+	src/qt/blockbrowser.h \
+	src/qt/statisticspage.h \
+    src/qt/QtWaitingSpinner.h 
 
 SOURCES += src/qt/bitcoin.cpp \
     src/qt/bitcoingui.cpp \
@@ -282,9 +294,6 @@ SOURCES += src/qt/bitcoin.cpp \
     src/qt/transactionfilterproxy.cpp \
     src/qt/transactionview.cpp \
     src/qt/walletmodel.cpp \
-    src/qt/walletview.cpp \
-    src/qt/walletstack.cpp \
-    src/qt/walletframe.cpp \
     src/bitcoinrpc.cpp \
     src/rpcdump.cpp \
     src/rpcnet.cpp \
@@ -309,9 +318,19 @@ SOURCES += src/qt/bitcoin.cpp \
     src/leveldb.cpp \
     src/txdb.cpp \
 	src/checkpointsync.cpp \
-    src/qt/splashscreen.cpp
-
-RESOURCES += src/qt/bitcoin.qrc
+    src/qt/splashscreen.cpp \
+#ifdef ENABLE_TRADE_REQUIRE_QT5
+	src/qt/tradingdialog.cpp \
+#endif
+	src/qt/plugins/mrichtexteditor/mrichtextedit.cpp \
+	src/qt/header.cpp \
+	src/qt/QtWaitingSpinner.cpp \
+	src/qt/ActionButton.cpp \
+	src/qt/statisticspage.cpp \
+	src/qt/blockbrowser.cpp 
+	
+RESOURCES += src/qt/bitcoin.qrc \
+	src/qt/themes.qrc
 
 FORMS += src/qt/forms/sendcoinsdialog.ui \
     src/qt/forms/coincontroldialog.ui \
@@ -324,7 +343,14 @@ FORMS += src/qt/forms/sendcoinsdialog.ui \
     src/qt/forms/sendcoinsentry.ui \
     src/qt/forms/askpassphrasedialog.ui \
     src/qt/forms/rpcconsole.ui \
-    src/qt/forms/optionsdialog.ui
+    src/qt/forms/optionsdialog.ui \
+#ifdef ENABLE_TRADE_REQUIRE_QT5
+	src/qt/forms/tradingdialog.ui \
+#endif
+	src/qt/plugins/mrichtexteditor/mrichtextedit.ui \
+	src/qt/forms/Header.ui \
+	src/qt/forms/statisticspage.ui \
+	src/qt/forms/blockbrowser.ui \
 
 contains(USE_QRCODE, 1) {
 HEADERS += src/qt/qrcodedialog.h

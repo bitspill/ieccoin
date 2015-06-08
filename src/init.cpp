@@ -369,7 +369,11 @@ std::string HelpMessage()
         "  -salvagewallet         " + _("Attempt to recover private keys from a corrupt wallet.dat") + "\n" +
         "  -checkblocks=<n>       " + _("How many blocks to check at startup (default: 288, 0 = all)") + "\n" +
         "  -checklevel=<n>        " + _("How thorough the block verification is (0-4, default: 3)") + "\n" +
+#ifdef ENABLE_TXINDEX_ENABLE_GUI
         "  -txindex               " + _("Maintain a full transaction index (default: 0)") + "\n" +
+#else
+        "  -txindex               " + _("Maintain a full transaction index (default: 1)") + "\n" +
+#endif
         "  -loadblock=<file>      " + _("Imports blocks from external blk000??.dat file") + "\n" +
         "  -maxorphantx=<n>       " + _("Keep at most <n> unconnectable transactions in memory (default: 25)") + "\n" +
         "  -reindex               " + _("Rebuild block chain index from current blk000??.dat files") + "\n" +
@@ -913,11 +917,17 @@ bool AppInit2(boost::thread_group& threadGroup)
                 }
 
                 // Check for changed -txindex state
+#ifdef ENABLE_TXINDEX_ENABLE_GUI
+                if (fTxIndex != GetBoolArg("-txindex", true)) {
+                    strLoadError = _("You need to rebuild the database!");
+                    break;
+                }
+#else
                 if (fTxIndex != GetBoolArg("-txindex", false)) {
                     strLoadError = _("You need to rebuild the database using -reindex to change -txindex");
                     break;
                 }
-
+#endif
                 uiInterface.InitMessage(_("Verifying blocks..."));
                 if (!VerifyDB(GetArg("-checklevel", 3),
                               GetArg( "-checkblocks", 288))) {

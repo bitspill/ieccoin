@@ -53,7 +53,11 @@ int nScriptCheckThreads = 0;
 bool fImporting = false;
 bool fReindex = false;
 bool fBenchmark = false;
+#ifdef ENABLE_TXINDEX_ENABLE_GUI
+bool fTxIndex = true;
+#else
 bool fTxIndex = false;
+#endif
 unsigned int nCoinCacheSize = 5000;
 
 /** Fees smaller than this (in satoshi) are considered zero fee (for transaction creation) */
@@ -2898,7 +2902,11 @@ bool InitBlockIndex() {
     }
 	
     // Use the provided setting for -txindex in the new database
+#ifdef ENABLE_TXINDEX_ENABLE_GUI
+    fTxIndex = GetBoolArg("-txindex", true);
+#else
     fTxIndex = GetBoolArg("-txindex", false);
+#endif
     pblocktree->WriteFlag("txindex", fTxIndex);
     printf("Initializing databases...\n");
 
@@ -2949,7 +2957,7 @@ bool InitBlockIndex() {
             uint256 thash;
             char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
 
-            loop
+            while (true)
             {
                 scrypt_1024_1_1_256_sp(BEGIN(block.nVersion), BEGIN(thash), scratchpad);
                 if (thash <= hashTarget)
@@ -4791,7 +4799,7 @@ void static ivugeoevolutioncoinMiner(CWallet *pwallet)
     CReserveKey reservekey(pwallet);
     unsigned int nExtraNonce = 0;
 
-    try { loop {
+    try { while (true) {
         while (vNodes.empty())
             MilliSleep(1000);
 
@@ -4829,13 +4837,13 @@ void static ivugeoevolutioncoinMiner(CWallet *pwallet)
         //
         int64 nStart = GetTime();
         uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
-        loop
+        while (true)
         {
             unsigned int nHashesDone = 0;
 
             uint256 thash;
             char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
-            loop
+            while (true)
             {
                 scrypt_1024_1_1_256_sp(BEGIN(pblock->nVersion), BEGIN(thash), scratchpad);
 
