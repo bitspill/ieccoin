@@ -1100,6 +1100,14 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
     {
         nSubsidy = 60000000 * COIN;
     }
+	else if(nHeight >= 75000 && nHeight < 150000)  
+    {
+        nSubsidy = 3.8 * COIN;
+    }
+	else if(nHeight >= 150000)  
+    {
+        nSubsidy = 1.6 * COIN;
+    }
     // Subsidy is cut in half every 5256000 blocks, which will occur approximately every 4 years
     nSubsidy >>= (nHeight / 5256000); // IvugeoEvolutionCoin: 5,256mil blocks in ~10 years
 
