@@ -1169,17 +1169,18 @@ void MapPort(bool)
 
 
 
+
+
 // DNS seeds
 // Each pair gives a source name and a seed name.
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strMainNetDNSSeed[][2] = {
-    {"ivugeoevolutioncoinseednode.com", "149.210.165.149"},
 	{"37.157.199.129", "37.157.199.129"},
-	{"37.157.199.104", "37.157.199.104"},
-	{"37.187.144.36", "37.187.144.36"},
-	{"144.76.238.2", "144.76.238.2"},
-	{"182.92.183.58", "182.92.183.58"},
+	{"185.8.238.212", "185.8.238.212"},
+	{"185.8.238.211", "185.8.238.211"},
+	{"185.8.238.107", "185.8.238.107"},
+	{"195.34.100.2", "195.34.100.2"},
     {NULL, NULL}
 };
 

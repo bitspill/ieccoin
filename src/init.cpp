@@ -317,7 +317,6 @@ std::string HelpMessage()
 		"  -checkpointenforce     " + _("Only accept block chain matching checkpoints issued by the Auto-Checkpoint systems Master Node (default: 1)") + "\n" +
         "  -onlynet=<net>         " + _("Only connect to nodes in network <net> (IPv4, IPv6 or Tor)") + "\n" +
         "  -discover              " + _("Discover own IP address (default: 1 when listening and no -externalip)") + "\n" +
-        "  -checkpointenforce     " + _("Only accept block chain matching checkpoints issued by the Auto-Checkpoint systems Master Node (default: 1)") + "\n" +
         "  -checkpoints           " + _("Only accept block chain matching built-in checkpoints (default: 1)") + "\n" +
         "  -listen                " + _("Accept connections from outside (default: 1 if no -proxy or -connect)") + "\n" +
         "  -bind=<addr>           " + _("Bind to given address and always listen on it. Use [host]:port notation for IPv6") + "\n" +

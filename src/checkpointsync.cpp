@@ -77,8 +77,8 @@ using namespace std;
 
 
 // sync-checkpoint master key
-const std::string CSyncCheckpoint::strMainPubKey = "0452c16e778beda02af76b2d1fb24cc5a508a91abfb2f11553fef78de3ce35dded340ed17f901bd1feb9d6abdead90ba3cac6e5442b0053d59fe873fe2b6db3e8a";
-const std::string CSyncCheckpoint::strTestPubKey = "0452c16e778beda02af76b2d1fb24cc5a508a91abfb2f11553fef78de3ce35dded340ed17f901bd1feb9d6abdead90ba3cac6e5442b0053d59fe873fe2b6db3e8a";
+const std::string CSyncCheckpoint::strMainPubKey = "0493765ec4881b7b767a8051e212723cb7c93da33532f0934d6ebdc3c50aad4af9ca0e7cae2943462d78a45b77dce621ade9ad2f5ddb8e3f36f33a15481c23acba";
+const std::string CSyncCheckpoint::strTestPubKey = "";
 std::string CSyncCheckpoint::strMasterPrivKey = "";
 
 
@@ -217,6 +217,7 @@ uint256 AutoSelectSyncCheckpoint()
 bool CheckSyncCheckpoint(const uint256& hashBlock, const CBlockIndex* pindexPrev)
 {
     int nHeight = pindexPrev->nHeight + 1;
+	
     LOCK(cs_hashSyncCheckpoint);
     // sync-checkpoint should always be accepted block
     assert(mapBlockIndex.count(hashSyncCheckpoint));
@@ -256,7 +257,7 @@ bool WantedByPendingSyncCheckpoint(uint256 hashBlock)
 bool ResetSyncCheckpoint()
 {
     LOCK(cs_hashSyncCheckpoint);
-    uint256 hash = Checkpoints::GetLatestHardenedCheckpoint();
+    const uint256& hash = Checkpoints::GetLatestHardenedCheckpoint();
     if (mapBlockIndex.count(hash) && !mapBlockIndex[hash]->IsInMainChain())
     {
         // checkpoint block accepted but not yet in main chain
@@ -266,13 +267,16 @@ bool ResetSyncCheckpoint()
         {
             return error("ResetSyncCheckpoint: SetBestChain failed for hardened checkpoint %s", hash.ToString().c_str());
         }
-    } else {
-        /* Reset to the last available checkpoint block in the main chain */
+    } 
+    else if(!mapBlockIndex.count(hash))
+    {
+        // checkpoint block not yet accepted
+        hashPendingCheckpoint = hash;
         checkpointMessagePending.SetNull();
-        hash = Checkpoints::GetLastAvailableCheckpoint();
+        printf("ResetSyncCheckpoint: pending for sync-checkpoint %s\n", hashPendingCheckpoint.ToString().c_str());
     }
-
-    if (!WriteSyncCheckpoint(hash))
+	
+    if (!WriteSyncCheckpoint((mapBlockIndex.count(hash) && mapBlockIndex[hash]->IsInMainChain())? hash : hashGenesisBlock))
         return error("ResetSyncCheckpoint: failed to write sync checkpoint %s", hash.ToString().c_str());
     printf("ResetSyncCheckpoint: sync-checkpoint reset to %s\n", hashSyncCheckpoint.ToString().c_str());
     return true;

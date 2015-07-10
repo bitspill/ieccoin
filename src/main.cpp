@@ -1108,6 +1108,7 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
     {
         nSubsidy = 1.6 * COIN;
     }
+
     // Subsidy is cut in half every 5256000 blocks, which will occur approximately every 4 years
     nSubsidy >>= (nHeight / 5256000); // IvugeoEvolutionCoin: 5,256mil blocks in ~10 years
 
@@ -1367,8 +1368,9 @@ void static InvalidChainFound(CBlockIndex* pindexNew)
     printf("InvalidChainFound:  current best=%s  height=%d  log2_work=%.8g  date=%s\n",
       hashBestChain.ToString().c_str(), nBestHeight, log(nBestChainWork.getdouble())/log(2.0),
       DateTimeStrFormat("%Y-%m-%d %H:%M:%S", pindexBest->GetBlockTime()).c_str());
-    if (pindexBest && nBestInvalidWork > nBestChainWork + (pindexBest->GetBlockWork() * 6).getuint256())
+/*    if (pindexBest && nBestInvalidWork > nBestChainWork + (pindexBest->GetBlockWork() * 6).getuint256())
         printf("InvalidChainFound: Warning: Displayed transactions may not be correct! You may need to upgrade, or other nodes may need to upgrade.\n");
+*/
 }
 
 void static InvalidBlockFound(CBlockIndex *pindex) {
@@ -2902,12 +2904,9 @@ bool LoadBlockIndex()
 
 bool InitBlockIndex() {
     // Check whether we're already initialized
-    if (pindexGenesisBlock != NULL) {
-        // Check whether the master checkpoint key has changed and reset the sync checkpoint if needed.
-        if (!CheckCheckpointPubKey())
-            return error("LoadBlockIndex() : failed to reset checkpoint master pubkey"); 
+    if (pindexGenesisBlock != NULL) 
         return true;
-    }
+    
 	
     // Use the provided setting for -txindex in the new database
 #ifdef ENABLE_TXINDEX_ENABLE_GUI
@@ -3202,13 +3201,13 @@ string GetWarnings(string strFor)
         strStatusBar = strMiscWarning;
     }
 
-    // Longer invalid proof-of-work chain
+ /*   // Longer invalid proof-of-work chain
     if (pindexBest && nBestInvalidWork > nBestChainWork + (pindexBest->GetBlockWork() * 6).getuint256())
     {
         nPriority = 2000;
         strStatusBar = strRPC = _("Warning: Displayed transactions may not be correct! You may need to upgrade, or other nodes may need to upgrade.");
     }
-
+*/
     // If detected invalid checkpoint enter safe mode
     if (hashInvalidCheckpoint != 0)
     {
